@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+
+PLIST="com.selesse.screenshotwatcher.plist"
+
+main() {
+    which fswatch > /dev/null || brew install fswatch
+    sudo cp "$PLIST" /System/Library/LaunchDaemons/
+    sudo sed -i '' -e "s/@USER@/$(whoami)/" "/System/Library/LaunchDaemons/$PLIST"
+    sudo launchctl load "/System/Library/LaunchDaemons/$PLIST"
+    cp watch-and-rename-screenshots $HOME/bin
+    sed -i '' -e "s/@USER@/$(whoami)/" $HOME/bin/watch-and-rename-screenshots
+}
+
+main

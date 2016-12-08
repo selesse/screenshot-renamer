@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+main() {
+    /usr/local/bin/fswatch -x -0 "@USER@/Desktop" | while read -rd "" event; do
+        if [[ $event =~ "M.png Renamed AttributeModified IsFile" ]] ; then
+            path="${event% Renamed AttributeModified IsFile}"
+
+            if [ -f "$path" ] ; then
+                timestamp=$(stat -f "%Sm" -t "%Y-%m-%d_%H-%M-%S" "$path")
+                new_filename="screenshot_$timestamp.png"
+                new_path="$(dirname "$path")/$new_filename"
+
+                mv "$path" "$new_path"
+            fi
+        fi
+    done
+}
+
+main
