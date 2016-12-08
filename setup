@@ -10,9 +10,9 @@ main() {
     cp watch-and-rename-screenshots "$HOME/bin"
     sed -i '' -e "s/@USER@/$(whoami)/" "$HOME/bin/watch-and-rename-screenshots"
 
-    sudo cp "$PLIST" /System/Library/LaunchDaemons/
-    sudo sed -i '' -e "s/@USER@/$(whoami)/" "/System/Library/LaunchDaemons/$PLIST"
-    sudo launchctl load "/System/Library/LaunchDaemons/$PLIST"
+    sudo cp "$PLIST" /Library/LaunchDaemons/
+    sudo sed -i '' -e "s/@USER@/$(whoami)/" "/Library/LaunchDaemons/$PLIST"
+    sudo launchctl load "/Library/LaunchDaemons/$PLIST"
 }
 
 main
