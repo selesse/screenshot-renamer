@@ -3,7 +3,7 @@
 set -e
 
 main() {
-    /usr/local/bin/fswatch -x -0 "@USER@/Desktop" | while read -rd "" event; do
+    /usr/local/bin/fswatch -x -0 "/Users/@USER@/Desktop" | while read -rd "" event; do
         if [[ $event =~ "M.png Renamed AttributeModified IsFile" ]] ; then
             path="${event% Renamed AttributeModified IsFile}"
 
