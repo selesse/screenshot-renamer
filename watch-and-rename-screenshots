@@ -1,18 +1,21 @@
 #!/bin/bash
 
-set -e
+rename_file() {
+    path="$1"
+    timestamp=$(stat -f "%Sm" -t "%Y-%m-%d_%H-%M-%S" "$path")
+    new_filename="screenshot_$timestamp.png"
+    new_path="$(dirname "$path")/$new_filename"
+
+    mv "$path" "$new_path"
+}
 
 main() {
-    /usr/local/bin/fswatch -x -0 "/Users/@USER@/Desktop" | while read -rd "" event; do
-        if [[ $event =~ "M.png Renamed AttributeModified IsFile" ]] ; then
-            path="${event% Renamed AttributeModified IsFile}"
+    /usr/local/bin/fswatch -x -0 "/Users/$(whoami)/Desktop" | while read -rd "" event; do
+        if [[ $event =~ ^/.*Desktop/Screen\ Shot\ .*\.png.*IsFile$ ]] ; then
+            path="$(echo "$event" | grep -E -o ".*\\.png")"
 
             if [ -f "$path" ] ; then
-                timestamp=$(stat -f "%Sm" -t "%Y-%m-%d_%H-%M-%S" "$path")
-                new_filename="screenshot_$timestamp.png"
-                new_path="$(dirname "$path")/$new_filename"
-
-                mv "$path" "$new_path"
+                rename_file "$path"
             fi
         fi
     done
