@@ -21,4 +21,10 @@ main() {
     done
 }
 
-main
+if [ $# -eq 0 ] ; then
+    main
+else
+    for file in "$@"; do
+        rename_file "$file"
+    done
+fi
