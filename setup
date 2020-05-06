@@ -3,16 +3,16 @@
 set -e
 
 PLIST="com.selesse.screenshotwatcher.plist"
+DESTINATION_FOLDER="$HOME/Library/LaunchAgents/"
 
 main() {
     which fswatch > /dev/null || brew install fswatch
 
     cp watch-and-rename-screenshots "$HOME/bin"
-    sed -i '' -e "s/@USER@/$(whoami)/" "$HOME/bin/watch-and-rename-screenshots"
 
-    cp "$PLIST" "$HOME/Library/LaunchAgents/"
-    sed -i '' -e "s/@USER@/$(whoami)/" "$HOME/Library/LaunchAgents/$PLIST"
-    launchctl load "$HOME/Library/LaunchAgents/$PLIST"
+    cp "$PLIST" "$DESTINATION_FOLDER"
+    sed -i '' -e "s/@USER@/$(whoami)/" "$DESTINATION_FOLDER/$PLIST"
+    launchctl load "$DESTINATION_FOLDER/$PLIST"
 }
 
 main
