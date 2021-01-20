@@ -8,6 +8,7 @@ DESTINATION_FOLDER="$HOME/Library/LaunchAgents/"
 main() {
     which fswatch > /dev/null || brew install fswatch
 
+    mkdir -p $HOME/Desktop/screenshots
     ln -s $(pwd)/watch-and-rename-screenshots "$HOME/bin"
 
     cp "$PLIST" "$DESTINATION_FOLDER"

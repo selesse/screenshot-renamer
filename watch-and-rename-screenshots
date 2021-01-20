@@ -10,15 +10,26 @@ rename_file() {
 }
 
 main() {
-    /usr/local/bin/fswatch -x -0 "/Users/$(whoami)/Desktop" | while read -rd "" event; do
+    /usr/local/bin/fswatch -x -0 "$HOME/Desktop" | while read -rd "" event; do
         if [[ $event =~ ^/.*Desktop/Screen\ Shot\ .*\.png.*IsFile$ ]] ; then
             path="$(echo "$event" | grep -E -o ".*\\.png")"
 
             if [ -f "$path" ] ; then
                 rename_file "$path"
             fi
+
+            move_stale_screenshots & disown
         fi
     done
+}
+
+move_stale_screenshots() {
+    find $HOME/Desktop -name "screenshot*png" -maxdepth 1 -mindepth 1 -print0 | while read -rd "" screenshot; do
+    age_of_screenshot=$(perl -l -e 'print int(-M $ARGV[0])' "$screenshot")
+    if [[ $age_of_screenshot -gt 10 ]] ; then
+        mv "$screenshot" "$HOME/Desktop/screenshots"
+    fi
+done
 }
 
 if [ $# -eq 0 ] ; then
