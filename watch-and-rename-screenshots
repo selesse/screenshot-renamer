@@ -18,18 +18,24 @@ main() {
                 rename_file "$path"
             fi
 
-            move_stale_screenshots & disown
+            # Wait a bit before moving stale screenshots, we don't wanna be
+            # modifying the list while we're browsing them.
+            { sleep 60 && move_stale_screenshots; } & disown
         fi
     done
 }
 
+find_all_screenshots() {
+    find $HOME/Desktop -name "screenshot*png" -maxdepth 1 -mindepth 1 -print0
+}
+
 move_stale_screenshots() {
-    find $HOME/Desktop -name "screenshot*png" -maxdepth 1 -mindepth 1 -print0 | while read -rd "" screenshot; do
-    age_of_screenshot=$(perl -l -e 'print int(-M $ARGV[0])' "$screenshot")
-    if [[ $age_of_screenshot -gt 10 ]] ; then
-        mv "$screenshot" "$HOME/Desktop/screenshots"
-    fi
-done
+    find_all_screenshots | while read -rd "" screenshot; do
+        age_of_screenshot=$(perl -l -e 'print int(-M $ARGV[0])' "$screenshot")
+        if [[ $age_of_screenshot -gt 10 ]] ; then
+            mv "$screenshot" "$HOME/Desktop/screenshots"
+        fi
+    done
 }
 
 if [ $# -eq 0 ] ; then
