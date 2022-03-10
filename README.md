@@ -29,4 +29,7 @@ To set this up, run `setup`. It assumes `$HOME/bin` is in your path.
 You'll also need to authorize `/bin/bash` full disk access for this to work,
 as explained in this [Stack Overflow answer][stack-overflow-answer].
 
+Note: screenshots don't appear instantaneously by default. To make this happen,
+make sure to `CMD+SHIFT+5 -> Options -> Disable show floating thumbnail`.
+
 [stack-overflow-answer]: https://stackoverflow.com/a/60500021
