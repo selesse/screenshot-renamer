@@ -9,8 +9,13 @@ rename_file() {
     mv "$path" "$new_path"
 }
 
+brew_prefix() {
+    [ -f /opt/homebrew/bin/brew ] && echo "/opt/homebrew"
+    [ -f /usr/local/bin/brew ] && echo "/usr/local"
+}
+
 main() {
-    /usr/local/bin/fswatch -x -0 "$HOME/Desktop" | while read -rd "" event; do
+    $(brew_prefix)/bin/fswatch -x -0 "$HOME/Desktop" | while read -rd "" event; do
         if [[ $event =~ ^/.*Desktop/Screen\ Shot\ .*\.png.*IsFile$ ]] ; then
             path="$(echo "$event" | grep -E -o ".*\\.png")"
 
